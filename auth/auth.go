@@ -33,3 +33,15 @@ func (u *User) SetPassword(password string) error {
 func (u *User) CheckPassword(password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 }
+
+type UseCase interface {
+	Create(user User) (User, error)
+	GetAll() (Users, error)
+	GetByID(id int) (User, error)
+	GetByUsername(username string) (User, error)
+	GetByPhone(phone string) (User, error)
+	Update(id int, user User) (User, error)
+	Delete(id int) (User, error)
+	Login(username string, password string) (User, error)
+	Logout() error
+}
