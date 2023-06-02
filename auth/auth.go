@@ -51,7 +51,7 @@ type UseCase interface {
 	GetByUsername(username string) (User, error)
 	GetByPhone(phone string) (User, error)
 	Update(id int, user User) (User, error)
-	Delete(id int) (User, error)
+	Delete(id int) error
 	Login(username string, password string) (User, error)
 	Logout() error
 }
@@ -63,5 +63,5 @@ type Repository interface {
 	GetByUsername(username string) (User, error)
 	GetByPhone(phone string) (User, error)
 	Update(id int, user User) (User, error)
-	Delete(id int) (User, error)
+	Delete(id int) error
 }
