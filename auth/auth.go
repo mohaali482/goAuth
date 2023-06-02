@@ -1,9 +1,17 @@
 package auth
 
 import (
+	"errors"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
+)
+
+var (
+	ErrUserNotFound     = errors.New("User not found")
+	ErrInvalidUsername  = errors.New("Invalid username")
+	ErrInvalidPhone     = errors.New("Invalid phone number")
+	ErrWrongCredentials = errors.New("Wrong credentials")
 )
 
 type User struct {
