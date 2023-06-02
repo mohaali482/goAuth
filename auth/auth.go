@@ -82,6 +82,7 @@ type UseCase interface {
 	Update(id int, user User) (User, error)
 	Delete(id int) error
 	Login(username string, password string) (User, error)
+	GenerateJWT(user User) (map[string]string, error)
 	Logout() error
 }
 
