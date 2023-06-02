@@ -21,18 +21,18 @@ var (
 )
 
 type User struct {
-	ID        int
-	FirstName string
-	LastName  string
-	Username  string `json:"username" validate:"required"`
-	Phone     string `json:"phone" validate:"required"`
-	Password  string `json:"password" validate:"required"`
-	Role      string
-	IsAdmin   bool
-	IsActive  bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt time.Time
+	ID        int       `json:"id"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	Username  string    `json:"username" validate:"required"`
+	Phone     string    `json:"phone" validate:"required"`
+	Password  string    `json:"password" validate:"required"`
+	Role      string    `json:"role"`
+	IsAdmin   bool      `json:"is_admin"`
+	IsActive  bool      `json:"is_active"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	DeletedAt time.Time `json:"deleted_at"`
 }
 
 type Users []User
