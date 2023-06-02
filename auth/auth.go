@@ -16,6 +16,8 @@ var (
 	ErrInvalidUsername  = errors.New("invalid username")
 	ErrInvalidPhone     = errors.New("invalid phone number")
 	ErrWrongCredentials = errors.New("wrong credentials")
+	ErrUsernameExists   = errors.New("username already exists")
+	ErrPhoneExists      = errors.New("phone already exists")
 )
 
 type User struct {
