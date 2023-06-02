@@ -8,10 +8,10 @@ import (
 )
 
 var (
-	ErrUserNotFound     = errors.New("User not found")
-	ErrInvalidUsername  = errors.New("Invalid username")
-	ErrInvalidPhone     = errors.New("Invalid phone number")
-	ErrWrongCredentials = errors.New("Wrong credentials")
+	ErrUserNotFound     = errors.New("user not found")
+	ErrInvalidUsername  = errors.New("invalid username")
+	ErrInvalidPhone     = errors.New("invalid phone number")
+	ErrWrongCredentials = errors.New("wrong credentials")
 )
 
 type User struct {
