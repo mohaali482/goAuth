@@ -2,8 +2,11 @@ package auth
 
 import (
 	"errors"
+	"reflect"
+	"strings"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -18,9 +21,9 @@ type User struct {
 	ID        int
 	FirstName string
 	LastName  string
-	Username  string
-	Phone     string
-	Password  string
+	Username  string `json:"username" validate:"required"`
+	Phone     string `json:"phone" validate:"required"`
+	Password  string `json:"password" validate:"required"`
 	Role      string
 	IsAdmin   bool
 	IsActive  bool
@@ -42,6 +45,18 @@ func (u *User) SetPassword(password string) error {
 
 func (u *User) CheckPassword(password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+}
+
+func (u *User) Validate() error {
+	validate := validator.New()
+	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
+		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+		if name == "-" {
+			return ""
+		}
+		return name
+	})
+	return validate.Struct(u)
 }
 
 type UseCase interface {
