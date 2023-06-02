@@ -27,7 +27,7 @@ func NewGormRepository(dbURL string) (*GormRepository, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&GormUser{})
 
 	return &GormRepository{db: db}, nil
 }
