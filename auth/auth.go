@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -33,6 +34,19 @@ type User struct {
 }
 
 type Users []User
+
+var (
+	Access  = "access"
+	Refresh = "refresh"
+)
+
+type JWTClaim struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Role     string `json:"role"`
+	Token    string `json:"token"`
+	jwt.RegisteredClaims
+}
 
 func (u *User) SetPassword(password string) error {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
