@@ -15,6 +15,7 @@ func Handlers(s auth.UserService) *gin.Engine {
 	r.Handle("GET", "/users", GetAll(s))
 	r.Handle("GET", "/users/:id", GetByID(s))
 	r.Handle("DELETE", "/users/:id", Delete(s))
+	r.Handle("PATCH", "/users/:id", Update(s))
 	r.Handle("POST", "/accounts/login", Login(s))
 	r.Handle("DELETE", "/accounts/logout", Logout(s))
 	r.Handle("POST", "/accounts/signup", Signup(s))
@@ -145,4 +146,35 @@ func Signup(s auth.UserService) gin.HandlerFunc {
 		c.JSON(http.StatusCreated, user)
 	}
 
+}
+
+func Update(s auth.UserService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var userForm auth.UserForm
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "id is not a valid id"})
+		}
+		err = c.ShouldBindJSON(&userForm)
+		if err != nil {
+			c.AbortWithStatus(http.StatusUnprocessableEntity)
+			return
+		}
+
+		if userForm.Phone != "" {
+			err = userForm.ValidatePhone()
+			if err != nil {
+				errors.ReturnErrorResponse(err, c)
+				return
+			}
+		}
+
+		user, err := s.Update(id, userForm.ToUserEntity())
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, user)
+	}
 }
