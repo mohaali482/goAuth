@@ -1,6 +1,7 @@
 package gorm
 
 import (
+	"github.com/mohaali/goAuth/auth"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -30,4 +31,42 @@ func NewGormRepository(dbURL string) (*GormRepository, error) {
 	db.AutoMigrate(&GormUser{})
 
 	return &GormRepository{db: db}, nil
+}
+
+func NewFromAuthUser(u auth.User) GormUser {
+	return GormUser{
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Username:  u.Username,
+		Phone:     u.Phone,
+		Password:  u.Password,
+		Role:      u.Role,
+		IsAdmin:   u.IsAdmin,
+		IsActive:  u.IsActive,
+		Model: gorm.Model{
+			ID:        uint(u.ID),
+			CreatedAt: u.CreatedAt,
+			UpdatedAt: u.UpdatedAt,
+			DeletedAt: gorm.DeletedAt{
+				Time: u.DeletedAt,
+			},
+		},
+	}
+}
+
+func (u GormUser) ToEntity() auth.User {
+	return auth.User{
+		ID:        int(u.ID),
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Username:  u.Username,
+		Phone:     u.Phone,
+		Password:  u.Password,
+		Role:      u.Role,
+		IsAdmin:   u.IsAdmin,
+		IsActive:  u.IsActive,
+		CreatedAt: u.CreatedAt,
+		UpdatedAt: u.UpdatedAt,
+		DeletedAt: u.DeletedAt.Time,
+	}
 }
