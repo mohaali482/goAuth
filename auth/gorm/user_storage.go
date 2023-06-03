@@ -43,14 +43,6 @@ func NewFromAuthUser(u auth.User) GormUser {
 		Role:      u.Role,
 		IsAdmin:   u.IsAdmin,
 		IsActive:  u.IsActive,
-		Model: gorm.Model{
-			ID:        uint(u.ID),
-			CreatedAt: u.CreatedAt,
-			UpdatedAt: u.UpdatedAt,
-			DeletedAt: gorm.DeletedAt{
-				Time: u.DeletedAt,
-			},
-		},
 	}
 }
 
