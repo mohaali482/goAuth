@@ -51,16 +51,25 @@ func (s *UserService) GetByPhone(phone string) (User, error) {
 }
 
 func (s *UserService) Update(id int, u User) (User, error) {
-	if err := u.Validate(); err != nil {
-		return User{}, err
+	if u.Username != "" {
+		user, err := s.repo.GetByUsername(u.Username)
+		if err == nil {
+			if user.ID != id {
+				return User{}, ErrUsernameExists
+			}
+		}
 	}
-	user, _ := s.repo.GetByUsername(u.Username)
-	if user.ID != id {
-		return User{}, ErrUsernameExists
+	if u.Phone != "" {
+		user, err := s.repo.GetByPhone(u.Phone)
+		if err == nil {
+			if user.ID != id {
+				return User{}, ErrPhoneExists
+			}
+		}
 	}
-	user, _ = s.repo.GetByPhone(u.Phone)
-	if user.ID != id {
-		return User{}, ErrPhoneExists
+
+	if u.Password != "" {
+		u.SetPassword(u.Password)
 	}
 
 	return s.repo.Update(id, u)
