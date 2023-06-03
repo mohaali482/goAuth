@@ -17,6 +17,7 @@ func Handlers(s auth.UserService) *gin.Engine {
 	r.Handle("DELETE", "/users/:id", Delete(s))
 	r.Handle("POST", "/accounts/login", Login(s))
 	r.Handle("DELETE", "/accounts/logout", Logout(s))
+	r.Handle("POST", "/accounts/signup", Signup(s))
 
 	return r
 
@@ -122,9 +123,20 @@ func Logout(s auth.UserService) gin.HandlerFunc {
 	}
 }
 
-func SignUp(s auth.UserService) gin.HandlerFunc {
+func Signup(s auth.UserService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userForm := auth.UserForm{}
+		var userForm auth.UserForm
+		err := c.ShouldBindJSON(&userForm)
+		if err != nil {
+			c.AbortWithError(http.StatusUnprocessableEntity, err)
+			return
+		}
+		err = userForm.Validate()
+		if err != nil {
+			errors.ReturnErrorResponse(err, c)
+			return
+		}
+
 		user, err := s.Create(userForm.ToUserEntity())
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
