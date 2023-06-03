@@ -72,7 +72,12 @@ func (s *UserService) Update(id int, u User) (User, error) {
 		u.SetPassword(u.Password)
 	}
 
-	return s.repo.Update(id, u)
+	_, err := s.repo.Update(id, u)
+	if err != nil {
+		return User{}, nil
+	}
+
+	return s.repo.GetByID(id)
 }
 
 func (s *UserService) Delete(id int) error {
