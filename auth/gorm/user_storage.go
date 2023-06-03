@@ -70,3 +70,67 @@ func (u GormUser) ToEntity() auth.User {
 		DeletedAt: u.DeletedAt.Time,
 	}
 }
+
+func (r *GormRepository) Create(u auth.User) (auth.User, error) {
+	user := NewFromAuthUser(u)
+	err := r.db.Create(&user).Error
+	if err != nil {
+		return auth.User{}, err
+	}
+	return user.ToEntity(), nil
+}
+
+func (r *GormRepository) GetAll() (auth.Users, error) {
+	var users []GormUser
+	err := r.db.Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+	var usersEntity auth.Users
+	for _, u := range users {
+		usersEntity = append(usersEntity, u.ToEntity())
+	}
+	return usersEntity, nil
+}
+
+func (r *GormRepository) GetByID(id int) (auth.User, error) {
+	var user GormUser
+	err := r.db.First(&user, id).Error
+	if err != nil {
+		return auth.User{}, err
+	}
+	return user.ToEntity(), nil
+}
+
+func (r *GormRepository) GetByUsername(username string) (auth.User, error) {
+	var user GormUser
+	err := r.db.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		return auth.User{}, err
+	}
+	return user.ToEntity(), nil
+}
+
+func (r *GormRepository) GetByPhone(phone string) (auth.User, error) {
+	var user GormUser
+	err := r.db.Where("phone = ?", phone).First(&user).Error
+	if err != nil {
+		return auth.User{}, err
+	}
+	return user.ToEntity(), nil
+}
+
+func (r *GormRepository) Update(id int, u auth.User) (auth.User, error) {
+	user := NewFromAuthUser(u)
+	err := r.db.Model(&user).Where("id = ?", id).Updates(&user).Error
+	if err != nil {
+		return auth.User{}, err
+	}
+	return user.ToEntity(), nil
+}
+
+func (r *GormRepository) Delete(id int) error {
+	var user GormUser
+	err := r.db.Where("id = ?", id).Delete(&user).Error
+	return err
+}
