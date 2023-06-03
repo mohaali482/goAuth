@@ -115,12 +115,12 @@ func (s *UserService) GenerateJWT(user User) (map[string]string, error) {
 		},
 	}
 
-	t, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaim).SignedString(s.Config.Secret)
+	t, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaim).SignedString([]byte(s.Config.Secret))
 	if err != nil {
 		return nil, err
 	}
 
-	rt, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshJwtClaim).SignedString(s.Config.Secret)
+	rt, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshJwtClaim).SignedString([]byte(s.Config.Secret))
 	if err != nil {
 		return nil, err
 	}
