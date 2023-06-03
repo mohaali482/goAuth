@@ -25,7 +25,7 @@ type User struct {
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
 	Username  string    `json:"username" validate:"required"`
-	Phone     string    `json:"phone" validate:"required e164"`
+	Phone     string    `json:"phone" validate:"required,e164"`
 	Password  string    `json:"password" validate:"required"`
 	Role      string    `json:"role"`
 	IsAdmin   bool      `json:"is_admin"`
