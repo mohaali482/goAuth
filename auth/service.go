@@ -29,6 +29,8 @@ func (s *UserService) Create(u User) (User, error) {
 	if _, err := s.repo.GetByPhone(u.Phone); err == nil {
 		return User{}, ErrPhoneExists
 	}
+
+	u.SetPassword(u.Password)
 	return s.repo.Create(u)
 }
 
