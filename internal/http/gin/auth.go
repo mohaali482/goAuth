@@ -5,7 +5,7 @@ import (
 	"github.com/mohaali/goAuth/auth"
 )
 
-func Handlers(s auth.UseCase) *gin.Engine {
+func Handlers(s auth.UserService) *gin.Engine {
 	r := gin.Default()
 
 	return r
