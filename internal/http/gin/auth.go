@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mohaali/goAuth/auth"
-	"github.com/mohaali/goAuth/errors"
+	"github.com/mohaali482/goAuth/auth"
+	"github.com/mohaali482/goAuth/errors"
 )
 
 func Handlers(s auth.UserService) *gin.Engine {

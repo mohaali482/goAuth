@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/mohaali/goAuth/config"
+	"github.com/mohaali482/goAuth/config"
 )
 
 type UserService struct {

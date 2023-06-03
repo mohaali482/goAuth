@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/mohaali/goAuth/auth"
-	authGorm "github.com/mohaali/goAuth/auth/gorm"
-	"github.com/mohaali/goAuth/config"
-	"github.com/mohaali/goAuth/internal/api"
-	"github.com/mohaali/goAuth/internal/http/gin"
+	"github.com/mohaali482/goAuth/auth"
+	authGorm "github.com/mohaali482/goAuth/auth/gorm"
+	"github.com/mohaali482/goAuth/config"
+	"github.com/mohaali482/goAuth/internal/api"
+	"github.com/mohaali482/goAuth/internal/http/gin"
 )
 
 func main() {

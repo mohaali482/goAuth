@@ -1,4 +1,4 @@
-module github.com/mohaali/goAuth
+module github.com/mohaali482/goAuth
 
 go 1.20
 

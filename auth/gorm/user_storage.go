@@ -1,7 +1,7 @@
 package gorm
 
 import (
-	"github.com/mohaali/goAuth/auth"
+	"github.com/mohaali482/goAuth/auth"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
