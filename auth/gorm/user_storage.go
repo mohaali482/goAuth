@@ -15,7 +15,7 @@ type GormUser struct {
 	Password  string
 	Role      string
 	IsAdmin   bool `gorm:"default:false"`
-	IsActive  bool `gorm:"default:true index"`
+	IsActive  bool `gorm:"index,default:true"`
 }
 
 type GormRepository struct {
