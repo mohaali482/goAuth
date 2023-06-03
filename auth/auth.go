@@ -123,6 +123,12 @@ func (u *UserForm) Validate() error {
 	return Validate(u)
 }
 
+func (u *UserForm) ValidatePhone() error {
+	validate := validator.New()
+	RegisterTagNameFunc(validate)
+	return validate.StructPartial(u, "Phone")
+}
+
 func (u *UserForm) ToUserEntity() User {
 	return User{
 		FirstName: u.FirstName,
