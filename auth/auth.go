@@ -64,15 +64,7 @@ func (u *User) CheckPassword(password string) error {
 }
 
 func (u *User) Validate() error {
-	validate := validator.New()
-	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
-		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
-		if name == "-" {
-			return ""
-		}
-		return name
-	})
-	return validate.Struct(u)
+	return Validate(u)
 }
 
 func (u *User) ValidatePhone() error {
@@ -116,13 +108,27 @@ type UserLogin struct {
 }
 
 func (u *UserLogin) Validate() error {
-	validate := validator.New()
-	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
-		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
-		if name == "-" {
-			return ""
-		}
-		return name
-	})
-	return validate.Struct(u)
+	return Validate(u)
+}
+
+type UserForm struct {
+	FirstName string `json:"first_name" validate:"required"`
+	LastName  string `json:"last_name" validate:"required"`
+	Username  string `json:"username" validate:"required"`
+	Phone     string `json:"phone" validate:"required,e164"`
+	Password  string `json:"password" validate:"required"`
+}
+
+func (u *UserForm) Validate() error {
+	return Validate(u)
+}
+
+func (u *UserForm) ToUserEntity() User {
+	return User{
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Username:  u.Username,
+		Phone:     u.Phone,
+		Password:  u.Password,
+	}
 }
