@@ -21,7 +21,7 @@ func Start(port string, handler http.Handler, options ...ServerOption) error {
 	srv := &http.Server{
 		ReadTimeout:  TIMEOUT,
 		WriteTimeout: TIMEOUT,
-		Addr:         ":" + port,
+		Addr:         port,
 		Handler:      handler,
 	}
 
