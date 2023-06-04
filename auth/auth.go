@@ -18,6 +18,7 @@ var (
 	ErrWrongCredentials = errors.New("wrong credentials")
 	ErrUsernameExists   = errors.New("username already exists")
 	ErrPhoneExists      = errors.New("phone already exists")
+	ErrInvalidToken     = errors.New("invalid token")
 )
 
 type User struct {
@@ -90,6 +91,7 @@ type UseCase interface {
 	Login(username string, password string) (User, error)
 	GenerateJWT(user User) (map[string]string, error)
 	ValidateJWT(token string) (JWTClaim, error)
+	RefreshJWT(token string) (map[string]string, error)
 	Logout() error
 }
 

@@ -146,3 +146,18 @@ func (s *UserService) ValidateJWT(token string) (JWTClaim, error) {
 	}
 	return jwtClaim, nil
 }
+
+func (s *UserService) RefreshToken(token string) (map[string]string, error) {
+	jwtClaim, err := s.ValidateJWT(token)
+	if err != nil {
+		return nil, err
+	}
+	if jwtClaim.Token != Refresh {
+		return nil, ErrInvalidToken
+	}
+	user, err := s.repo.GetByID(jwtClaim.ID)
+	if err != nil {
+		return nil, err
+	}
+	return s.GenerateJWT(user)
+}

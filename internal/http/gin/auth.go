@@ -15,6 +15,7 @@ func Handlers(s auth.UserService) *gin.Engine {
 	r.Handle("POST", "/accounts/login", Login(s))
 	r.Handle("DELETE", "/accounts/logout", Logout(s))
 	r.Handle("POST", "/accounts/signup", Signup(s))
+	r.Handle("POST", "/accounts/refresh", RefreshToken(s))
 	usersGroup := r.Group("/users").Use(middlewares.AuthMiddleware(s))
 	{
 		usersGroup.Handle("POST", "", Create(s))
@@ -180,5 +181,25 @@ func Update(s auth.UserService) gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, user)
+	}
+}
+
+func RefreshToken(s auth.UserService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		refreshToken, err := c.Cookie("refresh_token")
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "refresh_token not found in cookie"})
+			return
+		}
+
+		tokens, err := s.RefreshToken(refreshToken)
+		if err != nil {
+			c.AbortWithError(http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		c.SetCookie("refresh_token", tokens["refresh"], 3600, "/", "localhost", false, true)
+		c.SetCookie("access_token", tokens["access"], 3600, "/", "localhost", false, true)
+		c.JSON(http.StatusOK, gin.H{"message": "success"})
 	}
 }
