@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/mohaali482/goAuth/auth"
-	"github.com/mohaali482/goAuth/errors"
+	"github.com/mohaali482/goAuth/internal/http/gin/errors"
 )
 
 func Handlers(s auth.UserService) *gin.Engine {
