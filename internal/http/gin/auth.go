@@ -7,18 +7,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mohaali482/goAuth/auth"
 	"github.com/mohaali482/goAuth/internal/http/gin/errors"
+	"github.com/mohaali482/goAuth/internal/http/gin/middlewares"
 )
 
 func Handlers(s auth.UserService) *gin.Engine {
 	r := gin.Default()
-	r.Handle("POST", "/users", Create(s))
-	r.Handle("GET", "/users", GetAll(s))
-	r.Handle("GET", "/users/:id", GetByID(s))
-	r.Handle("DELETE", "/users/:id", Delete(s))
-	r.Handle("PATCH", "/users/:id", Update(s))
 	r.Handle("POST", "/accounts/login", Login(s))
 	r.Handle("DELETE", "/accounts/logout", Logout(s))
 	r.Handle("POST", "/accounts/signup", Signup(s))
+	usersGroup := r.Group("/users").Use(middlewares.AuthMiddleware(s))
+	{
+		usersGroup.Handle("POST", "", Create(s))
+		usersGroup.Handle("GET", "", GetAll(s))
+		usersGroup.Handle("GET", ":id", GetByID(s))
+		usersGroup.Handle("DELETE", ":id", Delete(s))
+		usersGroup.Handle("PATCH", ":id", Update(s))
+	}
 
 	return r
 

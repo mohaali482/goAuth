@@ -135,3 +135,14 @@ func (s *UserService) GenerateJWT(user User) (map[string]string, error) {
 		"refresh": rt,
 	}, nil
 }
+
+func (s *UserService) ValidateJWT(token string) (JWTClaim, error) {
+	var jwtClaim JWTClaim
+	_, err := jwt.ParseWithClaims(token, &jwtClaim, func(token *jwt.Token) (interface{}, error) {
+		return []byte(s.Config.Secret), nil
+	})
+	if err != nil {
+		return JWTClaim{}, err
+	}
+	return jwtClaim, nil
+}
