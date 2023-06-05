@@ -189,6 +189,7 @@ func Update(s auth.UserService) gin.HandlerFunc {
 		if err != nil {
 			log.Default().Println("Error converting id while trying to update user. Error: ", err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "id is not a valid id"})
+			return
 		}
 		err = c.ShouldBindJSON(&userForm)
 		if err != nil {
