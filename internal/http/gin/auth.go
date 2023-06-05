@@ -1,6 +1,7 @@
 package gin
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -31,26 +32,30 @@ func Handlers(s auth.UserService) *gin.Engine {
 
 func Create(s auth.UserService) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		log.Default().Println("Creating user started")
 		var user auth.User
 		err := c.ShouldBindJSON(&user)
 		if err != nil {
+			log.Default().Println("Error binding json while trying to create user. Error: ", err)
 			c.AbortWithStatus(http.StatusUnprocessableEntity)
 			return
 		}
 
 		err = user.Validate()
 		if err != nil {
+			log.Default().Println("Error validating user while trying to create user. Error: ", err)
 			errors.ReturnErrorResponse(err, c)
 			return
 		}
 
 		user, err = s.Create(user)
 		if err != nil {
+			log.Default().Println("Error creating user while trying to create user. Error: ", err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-
 		c.JSON(http.StatusCreated, user)
+		log.Default().Println("User created successfully")
 	}
 
 }
