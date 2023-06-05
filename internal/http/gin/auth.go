@@ -62,15 +62,19 @@ func Create(s auth.UserService) gin.HandlerFunc {
 
 func Delete(s auth.UserService) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		log.Default().Println("Deleting user started")
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
+			log.Default().Println("Error converting id while trying to delete user. Error: ", err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "id is not a valid id"})
 		}
 		if err := s.Delete(id); err != nil {
+			log.Default().Println("Error deleting user while trying to delete user. Error: ", err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "success"})
+		log.Default().Println("User deleted successfully")
 	}
 }
 
