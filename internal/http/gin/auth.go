@@ -13,10 +13,13 @@ import (
 
 func Handlers(s auth.UserService) *gin.Engine {
 	r := gin.Default()
-	r.Handle("POST", "/accounts/login", Login(s))
-	r.Handle("DELETE", "/accounts/logout", Logout(s))
-	r.Handle("POST", "/accounts/signup", Signup(s))
-	r.Handle("POST", "/accounts/refresh", RefreshToken(s))
+	accountsGroup := r.Group("/accounts")
+	{
+		accountsGroup.Handle("POST", "/login", Login(s))
+		accountsGroup.Handle("DELETE", "/logout", Logout(s))
+		accountsGroup.Handle("POST", "/signup", Signup(s))
+		accountsGroup.Handle("POST", "/refresh", RefreshToken(s))
+	}
 	usersGroup := r.Group("/users").Use(middlewares.AuthMiddleware(s))
 	{
 		usersGroup.Handle("POST", "", Create(s))
