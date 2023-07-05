@@ -68,6 +68,12 @@ func Delete(s auth.UserService) gin.HandlerFunc {
 			log.Default().Println("Error converting id while trying to delete user. Error: ", err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "id is not a valid id"})
 		}
+		_, err = s.GetByID(id)
+		if err != nil {
+			log.Default().Println("Error getting user by id while trying to delete user. Error: ", err)
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "User not found"})
+			return
+		}
 		if err := s.Delete(id); err != nil {
 			log.Default().Println("Error deleting user while trying to delete user. Error: ", err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -104,7 +110,7 @@ func GetByID(s auth.UserService) gin.HandlerFunc {
 		user, err := s.GetByID(id)
 		if err != nil {
 			log.Default().Println("Error getting user by id. Error: ", err)
-			c.AbortWithError(http.StatusNotFound, err)
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "User not found"})
 			return
 		}
 		c.JSON(http.StatusOK, user)
@@ -189,6 +195,12 @@ func Update(s auth.UserService) gin.HandlerFunc {
 		if err != nil {
 			log.Default().Println("Error converting id while trying to update user. Error: ", err)
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "id is not a valid id"})
+			return
+		}
+		_, err = s.GetByID(id)
+		if err != nil {
+			log.Default().Println("Error getting user by id while trying to update user. Error: ", err)
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "User not found"})
 			return
 		}
 		err = c.ShouldBindJSON(&userForm)
