@@ -6,7 +6,8 @@ import (
 	"github.com/mohaali482/goAuth/auth"
 	authGorm "github.com/mohaali482/goAuth/auth/gorm"
 	"github.com/mohaali482/goAuth/config"
-	fiberHandler "github.com/mohaali482/goAuth/internal/http/fiber"
+	"github.com/mohaali482/goAuth/internal/api"
+	"github.com/mohaali482/goAuth/internal/http/gin"
 )
 
 func main() {
@@ -19,11 +20,11 @@ func main() {
 		panic(err)
 	}
 	s := auth.NewUserService(r, appConfig)
-	// h := gin.Handlers(*s)
-	app := fiberHandler.App(*s)
+	h := gin.Handlers(*s)
+	// app := fiberHandler.App(*s)
 
-	// err = api.Start(appConfig.Port, h)
-	err = app.Listen(appConfig.Port)
+	err = api.Start(appConfig.Port, h)
+	// err = app.Listen(appConfig.Port)
 	if err != nil {
 		log.Fatalf("Error starting server: %s", err)
 	}
